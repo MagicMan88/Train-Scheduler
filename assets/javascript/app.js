@@ -12,3 +12,32 @@ var firebaseConfig = {
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
+
+  // Reference the database
+  var database = firebase.database();
+
+  // Onclick variables
+  var name;
+  var destination;
+  var firstTrain;
+  var frequency = 0;
+
+  $('#add-train').on('click', function() {
+    event.preventDefault();
+    // Entering data into database
+    name = $('#train-name').val().trim();
+    destination = $('#destination').val().trim();
+    firstTrain  = $('#first-train').val().trim();
+    frequency = $('#frequency').val().trim();
+
+    // Push entered info into database
+    database.ref().push({
+      name: name,
+      destination: destination,
+      firstTrain: firstTrain,
+      frequency: frequency,
+      dataAdded: firebase.database.Servervalue.TIMESTAP
+    });
+
+    
+  })
