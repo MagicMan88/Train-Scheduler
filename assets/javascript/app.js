@@ -39,5 +39,6 @@ var firebaseConfig = {
       dataAdded: firebase.database.Servervalue.TIMESTAP
     });
 
-    
+    $('form')[0].reset();
+
   })
