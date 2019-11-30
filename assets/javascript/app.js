@@ -10,6 +10,7 @@ var firebaseConfig = {
     messagingSenderId: "1099509239125",
     appId: "1:1099509239125:web:8d28ca819dccc03a09b3dc"
   };
+
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
@@ -39,6 +40,23 @@ var firebaseConfig = {
       dataAdded: firebase.database.Servervalue.TIMESTAP
     });
 
+    // Function to clear and reset the form
     $('form')[0].reset();
 
+  });
+
+  // Moment logic and appending entered info to the page
+  database.ref().on('child_added', function(childSnapshot) {
+    var nextArr;
+    var minAway;
+    // Make the first train come before now by changing the year
+    var NewFirstTrain = moment(childSnapshot.val().firstTrain, "hh:mm").subtract(1, 'years');
+    // Difference between first and current the first train
+    var diffTime = moment().diff(moment(NewFirstTrain), 'minutes');
+    var remainder = diffTime % childSnapshot.val().frequency;
+    //Minutes until next train arrives
+    var minAway = childSnapshot.val().frequency-remainder;
+    // Next train time
+    var nextTrainTime = moment().add(minAway, 'minutes');
+    nextTrainTime = moment(nextTrainTime).format('hh:mm');
   })
