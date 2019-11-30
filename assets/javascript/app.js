@@ -23,22 +23,33 @@ var destination;
 var firstTrain;
 var frequency = 0;
 
+// Button for adding trains
 $('#add-train').on('click', function () {
   event.preventDefault();
-  // Entering data into database
+
+  // Grabbing the user input
   name = $('#train-name').val().trim();
   destination = $('#destination').val().trim();
   firstTrain = $('#first-train').val().trim();
   frequency = $('#frequency').val().trim();
 
   // Push entered info into database
-  database.ref().push({
+  var newTrainInfo = {
     name: name,
     destination: destination,
     firstTrain: firstTrain,
     frequency: frequency,
-    dataAdded: firebase.database.Servervalue.TIMESTAP
-  });
+    // dataAdded: firebase.database.Servervalue.TIMESTAMP
+  };
+
+  // Uploads train info to the database
+  database.ref().push(newTrainInfo);
+
+  // Log everything to the console
+  console.log(newTrainInfo.name);
+  console.log(newTrainInfo.destination);
+  console.log(newTrainInfo.firstTrain);
+  console.log(newTrainInfo.frequency);
 
   // Function to clear and reset the form
   $('form')[0].reset();
@@ -47,7 +58,9 @@ $('#add-train').on('click', function () {
 
 // Moment logic and appending entered info to the page
 database.ref().on('child_added', function (childSnapshot) {
-  var nextArr;
+  console.log(childSnapshot.val());
+
+  // Storing everything in variables
   var minAway;
   // Make the first train come before now by changing the year
   var NewFirstTrain = moment(childSnapshot.val().firstTrain, "hh:mm").subtract(1, 'years');
@@ -61,14 +74,26 @@ database.ref().on('child_added', function (childSnapshot) {
   nextTrainTime = moment(nextTrainTime).format('hh:mm');
 
   // Appending info to the page
-  $('#add-row').append('<tr><td>' + childSnapshot.val().name +
-    '</td><td>' + childSnapshot.val().destination +
-    '</td><td>' + childSnapshot.val().frequency + 
-    '</td><td>' + nextTrainTime + 
-    '</td><td>' + minAway + '</td></td>');
+  var newRow = $('<tr>').append(
+    $('<td>').text(name),
+    $('<td>').text(destination),
+    $('<td>').text(firstTrain),
+    $('<td>').text(frequency),
+    $('<td>').text(minAway)
+  );
 
-    // Error Handling
-}, function(errorObject) {
-    console.log('Errors handled: ' + errorObject.code);
-    )
+  // Append the row to the table
+  $('#add-row').append(newRow);
+
+  // Error Handling
+}, function (errorObject) {
+  console.log('Errors handled: ' + errorObject.code);
 });
+
+// database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
+//   // Change the HTML to reflect
+//   $("#name-display").html(snapshot.val().name);
+//   $("#email-display").html(snapshot.val().email);
+//   $("#age-display").html(snapshot.val().age);
+//   $("#comment-display").html(snapshot.val().comment);
+// });
