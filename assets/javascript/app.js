@@ -89,11 +89,3 @@ database.ref().on('child_added', function (childSnapshot) {
 }, function (errorObject) {
   console.log('Errors handled: ' + errorObject.code);
 });
-
-// database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
-//   // Change the HTML to reflect
-//   $("#name-display").html(snapshot.val().name);
-//   $("#email-display").html(snapshot.val().email);
-//   $("#age-display").html(snapshot.val().age);
-//   $("#comment-display").html(snapshot.val().comment);
-// });
