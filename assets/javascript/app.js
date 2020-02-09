@@ -1,6 +1,13 @@
-// Main Processes
+// Steps to complete:
 
-// Your web app's Firebase configuration
+// 1. Create Firebase link
+// 2. Create initial train data in database
+// 3. Create button for adding new trains - then update the html + update the database
+// 4. Create a way to retrieve trains from the trainlist.
+// 5. Create a way to calculate the time way. Using difference between start and current time.
+//    Then take the difference and modulus by frequency. (This step can be completed in either 3 or 4)
+
+// Initialize Firebase
 var firebaseConfig = {
   apiKey: "AIzaSyCPkQWxhEy1WYRewFrqqQr5gMrqNIkwz5w",
   authDomain: "train-scheduler-5b429.firebaseapp.com",
@@ -11,7 +18,6 @@ var firebaseConfig = {
   appId: "1:1099509239125:web:8d28ca819dccc03a09b3dc"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 // Reference the database
@@ -25,21 +31,29 @@ var frequency = 0;
 
 // Button for adding trains
 $('#add-train').on('click', function () {
+  // Prevent the default form submit
   event.preventDefault();
 
   // Grabbing the user input
-  name = $('#train-name').val().trim();
-  destination = $('#destination').val().trim();
-  firstTrain = $('#first-train').val().trim();
-  frequency = $('#frequency').val().trim();
+  name = $('#train-name')
+    .val()
+    .trim();
+  destination = $('#destination')
+    .val()
+    .trim();
+  firstTrain = $('#first-train')
+    .val()
+    .trim();
+  frequency = $('#frequency')
+    .val()
+    .trim();
 
   // Push entered info into database
   var newTrainInfo = {
     name: name,
     destination: destination,
     firstTrain: firstTrain,
-    frequency: frequency,
-    // dataAdded: firebase.database.Servervalue.TIMESTAMP
+    frequency: frequency
   };
 
   // Uploads train info to the database
@@ -51,9 +65,15 @@ $('#add-train').on('click', function () {
   console.log(newTrainInfo.firstTrain);
   console.log(newTrainInfo.frequency);
 
-  // Function to clear and reset the form
-  $('form')[0].reset();
+   // Alert
+   alert("Train successfully added");
 
+   // Clears all of the text-boxes
+   $("#train-name").val("");
+   $("#destination").val("");
+   $("#first-train").val("");
+   $("#frequency").val("");
+ 
 });
 
 // Moment logic and appending entered info to the page
